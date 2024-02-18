@@ -1,0 +1,17 @@
+1. npm init => install package.json
+
+2. npm i express dotenv mongoose --save
+                     => Install express dotenv and moongoose
+
+3. npm i nodemon --save-dev
+                     => Install nodemon 
+
+4. Devlopment Mode => This mode is designed for developers during the development and 
+                      testing phases of the software lifecycle.
+
+5. Production Mode => This mode is intended for the final deployment of the application 
+                      in a live, user-facing environment.
+                      
+6. ProductControllers => Add logic for end point
+
+7.
