@@ -14,4 +14,37 @@
                       
 6. ProductControllers => Add logic for end point
 
-7.
+   Req => req is an object that represents the HTTP request from the client to the server.
+
+   Res => res is an object that represents the HTTP response that the server will send back
+          to the client.
+
+   Next => next is a function that is passed to middleware functions and route handlers.      
+           If next is not called, the request-response cycle can be terminated, and no 
+           further middleware or route handlers will be executed.
+
+    .Pagination => Pagination is a common technique used in web development to break down a
+                large set of data into smaller, more manageable chunks or pages. In the 
+                context of a React application, you can implement pagination to display
+                a limited number of items on each page and allow users to navigate through
+                the data.
+
+7.Bcrypt => npm install bcrypt
+              Use of bcrypt=>
+              1. Bcrypt is a widely used library for hashing passwords in a secure and efficient manner. 
+              2. Basically is is use to save data in format that can not be shown directly.
+         => Salt Generation
+              Use of Salt Generation
+              1. A unique random salt is generated for each password. The salt is then combined with the
+                 password before hashing.        
+              2. This ensures that even if two users have the same password, their hashed passwords will 
+                 differ due to the unique salts.               
+         => Asynchronous Nature
+              1. The hashing and comparison functions are asynchronous, making them suitable for
+                 handling potentially time-consuming tasks without blocking the event loop.  
+
+8.Jwttoken => npm install jsonwebtoken
+         => JSON Web Tokens (JWT) are a compact, URL-safe means of representing claims between two parties.
+         => They are often used for authentication and authorization purposes in web development.
+
+9.Nodemailer => 

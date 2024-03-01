@@ -1,8 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import ProductRoutes from "./routes/products.js";
 import { connectDatabase } from './config/dbConnect.js';
 import errorMiddleware from './middlewares/errors.js';
+import ProductRoutes from "./routes/products.js";
+import authRoutes from './routes/auth.js';
+import orderRoutes from './routes/order.js';
+import cookieParser from 'cookie-parser';
 
 // Handle Uncaught exception
 process.on('uncaughtException', (err) => {
@@ -11,16 +14,19 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 })
 
-
 const app = express();
 dotenv.config({ path: 'backend/config/config.env' });
+
 app.use(express.json());
+app.use(cookieParser());
 
 // Connecting to the database
 connectDatabase();
 
 // Import all Routes
 app.use("/api/v1", ProductRoutes);
+app.use("/api/v1", authRoutes);
+app.use("/api/v1", orderRoutes);
 
 // Using error middleware
 app.use(errorMiddleware);
@@ -29,12 +35,11 @@ const server = app.listen(process.env.PORT, () => {
     console.log(`Server started on Port: ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
 });
 
-// Handle unhandle Promise
-
+// Handle unhandled Promise
 process.on('unhandledRejection', (err) => {
     console.log(`Error :,${err}`);
     console.log('Shutting down server due to unhandled promise Rejection')
     server.close(() => {
         process.exit(1);
     })
-})
+});
