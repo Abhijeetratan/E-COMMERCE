@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import catchAsyncErrors from './catchAsyncErrors.js';
 import ErrorHandler from "../utils/ErrorHandler.js";
-import User from "../models/user.js"; // Adjust the path based on your project structure
+import User from "../models/user.js";
 
 // Check if user is authenticated or not
-const isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
+export const isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
     const { token } = req.cookies;
 
     if (!token) {
@@ -40,5 +40,4 @@ export const authorizeRoles = (...roles) => {
         }
         next();
     }
-}
-export default isAuthenticatedUser;
+};

@@ -47,4 +47,26 @@
          => JSON Web Tokens (JWT) are a compact, URL-safe means of representing claims between two parties.
          => They are often used for authentication and authorization purposes in web development.
 
-9.Nodemailer => 
+9.Nodemailer => npm install nodemailer
+         => Nodemailer is a popular module for Node.js that allows you to send emails easily.
+
+10.CORS(Cross-Origin Resource Sharing)=> npm install cors
+         => It's a crucial mechanism for protecting user data and preventing malicious attacks like
+            Cross-Site Request Forgery (CSRF).       
+
+
+=========================FRONTEND=========================  
+
+==> React => npx create-react-app .
+          => React is a JavaScript library for building user interfaces, primarily for web applications.
+          => It was developed by Facebook and open-sourced in 2013. 
+          => React is widely used because of its simplicity, efficiency, and flexibility.
+
+   => Component-Based Architecture =>
+          => React is based on a component-based architecture, where UIs are composed of reusable and
+             independent components.
+          => Each component represents a part of the user interface and encapsulates its own logic, 
+             state, and structure.    
+   => Virtual DOM          
+
+

@@ -1,7 +1,8 @@
 import express from "express";
 const router = express.Router();
 
-import isAuthenticatedUser, { authorizeRoles } from "../middlewares/auth.js"; // Corrected import statement
+import { isAuthenticatedUser, authorizeRoles } from '../middlewares/auth.js';
+
 import { UpdateOrders, allOrders, deleteOrders, getOrderDetails, myOrders, newOrder } from "../controllers/orderControllers.js";
 
 router.route("/orders/new").post(isAuthenticatedUser, newOrder); // Apply isAuthenticatedUser middleware

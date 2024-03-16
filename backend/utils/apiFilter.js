@@ -1,4 +1,4 @@
-import { json } from "express";
+import Product from '../models/Product.js'; // Import the Product model
 
 class ApiFilter {
     constructor(query, querystr) {
@@ -29,21 +29,21 @@ class ApiFilter {
         const fieldsToRemove = ["keyword", "page"];
         fieldsToRemove.forEach((el) => delete queryCopy[el]);
 
-        // Fields tp remove
-        let querystr = JSON.stringify(queryCopy);
+        // Convert queryCopy to MongoDB query operators
+        let queryStr = JSON.stringify(queryCopy);
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
 
-        // Advance filter for price, rating, etc.
-
+        // Log the transformed query for debugging
         console.log("============================");
         console.log(queryCopy);
         console.log("============================");
 
-        // Use queryCopy instead of this.querystr in the find method
-        this.query = this.query.find(JSON.parse(querystr));
+        // Use the transformed query to filter the data
+        this.query = Product.find(JSON.parse(queryStr)); // Assuming 'Product' is a model
 
         return this; // Return the modified query if needed
     }
+
     pagination(resPerPage) {
         const currentPage = Number(this.querystr.page) || 1;
         const skip = resPerPage * (currentPage - 1);
@@ -51,6 +51,5 @@ class ApiFilter {
         return this;
     }
 }
-
 
 export default ApiFilter;

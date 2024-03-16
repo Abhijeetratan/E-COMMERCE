@@ -1,23 +1,37 @@
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
-import Product from "../models/product.js";
+import Product from '../models/Product.js'; // Adjust the path as needed
+
 import ErrorHandler from "../utils/ErrorHandler.js";
 import ApiFilter from "../utils/apiFilter.js";
 
 // Get products => /api/v1/products
 export const getProducts = catchAsyncErrors(async (req, res) => {
-    const resPerPage = 4;
-    const apiFilter = new ApiFilter(Product.find(req.query)).search().filters();
+    try {
+        const resPerPage = 4;
 
-    let products = await apiFilter.query;
-    let filterProductsCount = products.length; // Fix the variable assignment
-    apiFilter.pagination(resPerPage);
-    products = await apiFilter.query.clone();
+        const apiFilter = new ApiFilter(Product.find(), req.query)
+            .search()
+            .filters()
+            .pagination(resPerPage);
 
-    res.status(200).json({
-        resPerPage,
-        filterProductsCount,
-        products,
-    });
+        const products = await apiFilter.query;
+
+        const filterProductsCount = await Product.countDocuments(apiFilter.querystr);
+
+        res.status(200).json({
+            resPerPage,
+            filterProductsCount,
+            products,
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ error: error.message });
+        }
+
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // Create new product => /api/v1/products
@@ -99,7 +113,6 @@ export const DeleteProduct = catchAsyncErrors(async (req, res) => {
 // ##### REVIEW #####
 
 // Create/Update product review ==> /api/v1/reviews
-
 export const createProductReview = catchAsyncErrors(async (req, res, next) => {
     const { rating, comment, productId } = req.body; // Extract rating, comment, and productId from request body
 
@@ -162,4 +175,50 @@ export const getProductReviews = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         reviews: product.reviews,
     });
+});
+
+// Delete product review => /api/v1/admin/reviews
+export const DeleteReview = catchAsyncErrors(async (req, res, next) => {
+    try {
+        const productId = req.query.productId;
+
+        // Retrieve the product
+        const product = await Product.findById(productId);
+
+        // Validate productId
+        if (!product) {
+            return next(new ErrorHandler("Product not found", 404));
+        }
+
+        // Filter out the review to be deleted
+        const updatedReviews = product.reviews.filter(
+            (review) => review._id.toString() !== req.query.id.toString()
+        );
+
+        // Update numOfReviews based on the filtered reviews
+        const numOfReviews = updatedReviews.length;
+
+        // Calculate the new rating based on updated reviews
+        const newRating = numOfReviews === 0 ? 0 : updatedReviews.reduce((acc, item) => item.rating + acc, 0) / numOfReviews;
+
+        // Update the product with the filtered reviews, numOfReviews, and new rating
+        const updatedProduct = await Product.findByIdAndUpdate(
+            productId,
+            {
+                reviews: updatedReviews,
+                numOfReviews: numOfReviews,
+                rating: newRating
+            },
+            { new: true }
+        );
+
+        // Sending a response indicating successful deletion
+        res.status(200).json({
+            success: true,
+            message: "Review deleted successfully",
+            product: updatedProduct // Optionally, you can send the updated product back
+        });
+    } catch (error) {
+        next(error);
+    }
 });

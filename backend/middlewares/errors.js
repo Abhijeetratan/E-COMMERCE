@@ -13,10 +13,11 @@ export default (err, req, res, next) => {
             stack: err?.stack
         });
     }
-    // Handle Invalid Moongose ID error
-    if (err.name === 'casterror') {
-        const message = 'Resource not found:${err?.path}'
-        error: new ErrorHandler()
+
+    // Handle Invalid Mongoose ID error
+    if (err.name === 'CastError') {
+        const message = `Resource not found: ${err?.path}`;
+        error = new ErrorHandler(message, 404);
     }
 
     // Handle Validation error
@@ -24,6 +25,7 @@ export default (err, req, res, next) => {
         const message = Object.values(err.errors).map((value) => value.message);
         error = new ErrorHandler(message, 400);
     }
+
     if (process.env.NODE_ENV === 'PRODUCTION') {
         res.status(error.statusCode).json({
             message: error.message

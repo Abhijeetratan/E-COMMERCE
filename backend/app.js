@@ -6,6 +6,7 @@ import ProductRoutes from "./routes/products.js";
 import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/order.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 // Handle Uncaught exception
 process.on('uncaughtException', (err) => {
@@ -14,7 +15,9 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 })
 
+
 const app = express();
+app.use(cors());
 dotenv.config({ path: 'backend/config/config.env' });
 
 app.use(express.json());

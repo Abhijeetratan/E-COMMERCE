@@ -7,8 +7,4 @@ export const connectDatabase = () => {
     mongoose.connect(DB_URI).then((con) => {
         console.log(`MongoDB Database connected with HOST:${con?.connection?.host}`)
     })
-
-
-
-
 };
