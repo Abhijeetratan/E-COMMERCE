@@ -1,5 +1,5 @@
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
-import Product from '../models/Product.js'; // Adjust the path as needed
+import Product from '../models/Product.js';
 
 import ErrorHandler from "../utils/ErrorHandler.js";
 import ApiFilter from "../utils/apiFilter.js";
