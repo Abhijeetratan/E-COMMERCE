@@ -1,13 +1,28 @@
 import default_product from './images/default_product.png'; // Import the image
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MetaData } from './layout/MetaData';
 import { useGetProductsQuery } from '../redux/api/productApi';
 import ProductItem from './product/ProductItem';
 import Loader from './layout/Loader';
+import { toast } from 'react-hot-toast';
+import { CustomPagination } from './layout/CustomPagination';
+import { useSearchParams } from 'react-router-dom';
 
 const Home = () => {
-  const { data, isLoading, error } = useGetProductsQuery();
-  console.log(data);
+  let [searchParams] = useSearchParams();
+  const page = searchParams.get("page") || 1;
+  const keyword = searchParams.get("keyword") || "";
+
+  const params = { page, keyword };
+
+  const { data, isLoading, error, iserror } = useGetProductsQuery();
+
+  useEffect(() => {
+    if (iserror) {
+      toast.error(iserror?.message);
+    }
+  }, [iserror]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -15,6 +30,7 @@ const Home = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+  // const columnsize=keyword?:4:3
 
   return (
     <>
@@ -30,6 +46,10 @@ const Home = () => {
               ))}
             </div>
           </section>
+          <CustomPagination
+            resPerPage={data?.resPerPage} // Default to 10 if data?.resPerPage is undefined
+            filteredProductCount={data?.filteredProductCount} // Default to 0 if data?.filteredProductCount is undefined
+          />
         </div>
       </div>
     </>
@@ -37,3 +57,4 @@ const Home = () => {
 };
 
 export default Home;
+
