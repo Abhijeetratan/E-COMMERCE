@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6, // Set the minimum length constraint
-        maxlength: 255, // Set a more reasonable maximum length constraint
+        minlength: 6, // Set the minimum length 
+        maxlength: 255, // Set a more reasonable maximum length
         select: false, // This is based on your original schema where you were using select("+password")
     },
     avatar: {
